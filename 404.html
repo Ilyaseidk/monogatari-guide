@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>失礼、噛みました · 〈物語〉 Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#0b0b0b; --paper:#f4f1ea; --red:#e60012; --snail:#e8a33d; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; background:var(--snail); color:var(--ink); font-family:"Zen Kaku Gothic New",system-ui,sans-serif;
+           display:grid; grid-template-columns:1fr; place-items:center; padding:32px 16px; overflow-x:hidden; }
+    .card { max-width:720px; width:100%; position:relative; }
+    .k { position:fixed; right:-4vw; bottom:-6vw; font-family:"Shippori Mincho B1",serif; font-weight:800; font-size:min(60vw,70vh); line-height:1; color:rgba(11,11,11,.08); pointer-events:none; }
+    .eyebrow { font-size:12px; letter-spacing:.3em; text-transform:uppercase; }
+    h1 { font-family:"Shippori Mincho B1",serif; font-weight:800; font-size:clamp(44px,9vw,104px); line-height:1; margin:14px 0 18px; }
+    .url { font-family:"Shippori Mincho B1",serif; font-size:clamp(18px,3vw,24px); background:var(--ink); color:var(--paper); display:inline-block; padding:4px 12px; margin-bottom:24px; word-break:break-all; }
+    p { font-size:17px; max-width:520px; }
+    .stutter { font-family:"Shippori Mincho B1",serif; font-size:clamp(22px,4vw,34px); margin:28px 0 8px; }
+    .stutter small { display:block; font-family:"Zen Kaku Gothic New",sans-serif; font-size:13px; letter-spacing:.2em; margin-top:4px; }
+    a.btn { display:inline-block; margin-top:28px; background:var(--ink); color:var(--paper); padding:12px 22px; text-decoration:none; letter-spacing:.14em; font-size:13px; }
+    a.btn:hover { background:var(--red); }
+  </style>
+</head>
+<body>
+  <div class="k" aria-hidden="true">迷</div>
+  <main class="card">
+    <div class="eyebrow">404 · Lost Cow</div>
+    <h1>Hm? You seem lost.</h1>
+    <div class="url" id="url"></div>
+    <p>There's no page here. Then again, I've been wandering this neighborhood for a while too, so who am I to judge.</p>
+    <p class="stutter" id="stutter">Pardon me, Arararagi-san…<small>SORRY, I STUTTERED</small></p>
+    <a class="btn" href="./">BACK TO THE GUIDE →</a>
+  </main>
+  <script>
+    // Show the mistyped path, then "stutter" it, the way Mayoi mangles names.
+    const path = decodeURIComponent(location.pathname.split("/").filter(Boolean).pop() || location.pathname);
+    const el = document.getElementById("url");
+    el.textContent = path;
+    const mangle = (s) => s.length < 3 ? s + s.slice(-1) : s.slice(0, 2) + s.slice(1, 3) + s.slice(2);
+    setTimeout(() => { el.textContent = mangle(path); }, 1400);
+  </script>
+</body>
+</html>

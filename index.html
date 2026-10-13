@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>〈物語〉 Watch & Read Guide</title>
+  <meta name="description" content="A spoiler-safe, Shaft-styled guide to watching and reading the Monogatari Series: every watch order, every novel, and what's been animated.">
+  <meta property="og:title" content="〈物語〉 Watch & Read Guide">
+  <meta property="og:description" content="Every watch order, all 31 novels, and exactly what's been animated. Spoiler-safe.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23e60012'/><text x='50' y='74' font-size='70' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>物</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="flash" aria-hidden="true"><div><div class="t"></div><div class="s"></div></div></div>
+
+  <header class="topbar">
+    <a class="logo" href="#top">〈<b>物語</b>〉GUIDE</a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#order">Order</a><a href="#map">Macro Map</a><a href="#oddities">Oddities</a>
+      <a href="#characters">Characters</a><a href="#after">After the Anime</a><a href="#quiz">Quiz</a><a href="#faq">FAQ</a>
+    </nav>
+    <button class="flash-toggle" id="flashToggle" aria-pressed="true" title="Shaft-style text flashes between sections">FLASH ON</button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-kanji" aria-hidden="true">物語</div>
+      <div class="hero-copy">
+        <div class="hero-eyebrow">The Monogatari Series · Watch &amp; Read Guide</div>
+        <h1><span>Where do</span><span>I even</span><span class="red">start?</span></h1>
+        <p>Every watch order, all 31 novels, and exactly what has made it to the screen. Set how far you've gotten at the bottom of the page, and everything past that point stays censored.</p>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+      <div class="scroll-cue">SCROLL ↓</div>
+    </section>
+
+    <section class="chapter" id="order">
+      <div class="titlecard" style="--card-bg:#e60012;--card-fg:#f4f1ea" data-flash="第一話|ORDER|順番">
+        <div class="ep">第一話</div>
+        <h2>The Order</h2>
+        <p>Four routes through the anime. Switch between them and watch the seasons reshuffle. Click any card to mark everything up to it as watched.</p>
+        <div class="big" aria-hidden="true">順</div>
+      </div>
+      <div class="wrap">
+        <div class="order-tabs" id="orderTabs" role="group" aria-label="Watch order"></div>
+        <p class="order-note" id="orderNote"></p>
+        <div class="meter" id="meter"></div>
+        <div class="order-grid" id="orderGrid"></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="map">
+      <div class="titlecard" style="--card-bg:#f4f1ea;--card-fg:#0b0b0b" data-flash="第二話|MACRO MAP|全巻">
+        <div class="ep">第二話</div>
+        <h2>The Macro Map</h2>
+        <p>All 31 Japanese volumes, story by story: what's animated, what's announced, and what only exists on the page. Click a spine to open it.</p>
+        <div class="big" aria-hidden="true">本</div>
+      </div>
+      <div class="wrap">
+        <div class="map-stats" id="mapStats"></div>
+        <div class="legend">
+          <span><i class="seg-anime"></i>Animated</span>
+          <span><i class="seg-next"></i>Anime announced</span>
+          <span><i class="seg-novel"></i>Novel only</span>
+          <span style="color:var(--grey)">EN = official English translation exists</span>
+        </div>
+        <div class="map-scroll"><div class="map" id="mapCols"></div></div>
+        <div class="vol-detail" id="volDetail"><p class="timeline-note">Select a volume above.</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="oddities">
+      <div class="titlecard" style="--card-bg:#0b0b0b;--card-fg:#f4f1ea;border-top:1px solid var(--line);border-bottom:1px solid var(--line)" data-flash="第三話|ODDITIES|怪異">
+        <div class="ep">第三話</div>
+        <h2>Oddities, by Arc</h2>
+        <p>Each arc is named for a girl and the oddity she meets. Arcs you haven't reached stay sealed.</p>
+        <div class="big" aria-hidden="true">怪</div>
+      </div>
+      <div class="wrap"><div class="odd-grid" id="oddGrid"></div></div>
+    </section>
+
+    <section class="chapter" id="characters">
+      <div class="titlecard" style="--card-bg:#7b2d8e;--card-fg:#f4f1ea" data-flash="第四話|CHARACTERS|人物">
+        <div class="ep">第四話</div>
+        <h2>The Cast</h2>
+        <p>Characters you haven't met yet stay silhouettes. Hover for the head tilt. The relationship web below fills in as you watch.</p>
+        <div class="big" aria-hidden="true">人</div>
+      </div>
+      <div class="wrap">
+        <div class="roster" id="roster"></div>
+        <div class="web-wrap">
+          <h3>The Web</h3>
+          <p class="sub">Hover or tap a face to trace their connections. New threads appear as your progress moves.</p>
+          <svg id="web" viewBox="0 0 900 640" role="img" aria-label="Character relationship web"></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="after">
+      <div class="titlecard" style="--card-bg:#c2410c;--card-fg:#f4f1ea" data-flash="第五話|AFTER|その後">
+        <div class="ep">第五話</div>
+        <h2>After the Anime</h2>
+        <p>The main story is fully animated. The rest of the story keeps going in print. Here's the exit ramp, and which parts you can read in English.</p>
+        <div class="big" aria-hidden="true">続</div>
+      </div>
+      <div class="wrap">
+        <p class="you-are" id="youAre"></p>
+        <div class="exit" id="exit"></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="quiz">
+      <div class="titlecard" style="--card-bg:#f2b705;--card-fg:#0b0b0b" data-flash="第六話|WHICH ODDITY|診断">
+        <div class="ep">第六話</div>
+        <h2>Which Oddity Are You?</h2>
+        <p>Five questions. No spoilers, unless you count self-knowledge.</p>
+        <div class="big" aria-hidden="true">診</div>
+      </div>
+      <div class="wrap"><div class="quiz" id="quizBox"></div></div>
+    </section>
+
+    <section class="chapter" id="faq">
+      <div class="titlecard" style="--card-bg:#f4f1ea;--card-fg:#0b0b0b" data-flash="第七話|FAQ|質問">
+        <div class="ep">第七話</div>
+        <h2>Questions</h2>
+        <p>Answered by the class president, and questioned by someone who claims to know nothing.</p>
+        <div class="big" aria-hidden="true">問</div>
+      </div>
+      <div class="wrap faq-grid">
+        <div>
+          <div class="speaker">
+            <div class="portrait" style="--c:#d9d4c7" data-char="tsubasa"><div class="tile"><span style="font-size:36px">羽</span></div></div>
+            <blockquote>"I don't know everything. I just know what I know."<cite>TSUBASA HANEKAWA</cite></blockquote>
+          </div>
+          <div id="faqList"></div>
+        </div>
+        <div class="ougi on-light">
+          <div class="speaker">
+            <div class="portrait" style="--c:#111" data-char="ougi"><div class="tile"><span style="font-size:36px">扇</span></div></div>
+            <blockquote>"I don't know anything. You're the one who knows."<cite>ŌGI'S CORNER · QUESTIONS, NOT THEORIES</cite></blockquote>
+          </div>
+          <ol id="ougiList"></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <p>An unofficial fan guide to the Monogatari Series by NISIOISIN (Kodansha), illustrated by VOFAN, animated by SHAFT. Covers and character images come from <a href="https://myanimelist.net">MyAnimeList</a> via the <a href="https://jikan.moe">Jikan API</a>; all rights belong to their owners.</p>
+      <p>Adaptation status current as of October 2026. Not affiliated with Aniplex, Kodansha, or SHAFT.</p>
+    </div>
+    <div class="donuts">
+      <small>Shinobu's donut count</small>
+      <div class="donut-row" id="donuts"></div>
+      <div class="shinobu-says" id="shinobuSays"></div>
+    </div>
+  </footer>
+
+  <div class="spoilbar" role="region" aria-label="Spoiler shield">
+    <div class="lab">SPOILER SHIELD<small>I've watched up through</small></div>
+    <div class="spoil-mid">
+      <div class="now" id="spoilNow"></div>
+      <input type="range" id="spoilRange" min="0" value="0" aria-label="How far you've watched or read">
+    </div>
+    <div class="ctrl"><button id="spoilMinus" aria-label="Back one">−</button><button id="spoilPlus" aria-label="Forward one">+</button></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/mal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
