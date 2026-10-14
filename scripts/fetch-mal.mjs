@@ -17,11 +17,17 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
   .replace(/ou/g, "o").replace(/uu/g, "u").replace(/[^a-z]/g, "");
 const firstWord = (q) => norm(q.split(/[:(]/)[0]);
+// "Araragi, Koyomi" and "Koyomi Araragi" both become "araragi|koyomi"
+const nameKey = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  .replace(/ou/g, "o").replace(/uu/g, "u").split(/[^a-z]+/).filter(Boolean).sort().join("|");
 
 async function jikan(p) {
   for (let i = 0; i < 5; i++) {
     await sleep(700);
-    const r = await fetch(JIKAN + p);
+    let r;
+    try {
+      r = await fetch(JIKAN + p, { headers: { "User-Agent": "monogatari-guide/1.0 (GitHub Pages fan site)", Accept: "application/json" }, signal: AbortSignal.timeout(20000) });
+    } catch (err) { console.warn(`  network error on ${p}: ${err.message}`); await sleep(2000); continue; }
     if (r.status === 429) { await sleep(2000); continue; }
     if (!r.ok) throw new Error(`${r.status} ${p}`);
     return r.json();
@@ -61,11 +67,25 @@ for (const id of castFrom) {
   try { ({ data } = await jikan(`/anime/${id}/characters`)); } catch (err) { console.warn("  " + err.message); continue; }
   for (const c of CHARACTERS) {
     if (out.characters[c.id]) continue;
-    const hit = data.find((d) => norm(d.character.name) === norm(c.mal));
+    const hit = data.find((d) => nameKey(d.character.name) === nameKey(c.mal));
     if (hit) out.characters[c.id] = { id: hit.character.mal_id, img: hit.character.images?.webp?.image_url || hit.character.images?.jpg?.image_url, url: hit.character.url };
   }
 }
+// anyone still missing: search MAL's character index directly
+for (const c of CHARACTERS) {
+  if (out.characters[c.id]) continue;
+  try {
+    const { data } = await jikan(`/characters?q=${encodeURIComponent(c.mal.split(",").reverse().join(" ").trim())}&limit=10`);
+    const hit = data.find((d) => nameKey(d.name) === nameKey(c.mal));
+    if (hit) out.characters[c.id] = { id: hit.mal_id, img: hit.images?.webp?.image_url || hit.images?.jpg?.image_url, url: hit.url };
+  } catch (err) { console.warn("  " + err.message); }
+}
 for (const c of CHARACTERS) console.log(`${out.characters[c.id] ? "✓" : "✗"} ${c.name}`);
+
+if (!Object.keys(out.anime).length && !Object.keys(out.characters).length) {
+  console.error("\nGot nothing back from Jikan (it may be down or blocking this runner). Leaving data/mal.json unchanged.");
+  process.exit(1);
+}
 
 await mkdir(path.join(root, "data"), { recursive: true });
 await writeFile(path.join(root, "data/mal.json"), JSON.stringify(out, null, 2) + "\n");
