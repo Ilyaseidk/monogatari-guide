@@ -7,7 +7,7 @@
    ========================================================= */
 (function () {
   const JIKAN = "https://api.jikan.moe/v4";
-  const CACHE_KEY = "mono-mal-cache-v1";
+  const CACHE_KEY = "mono-mal-cache-v2";
   const TTL = 7 * 24 * 3600 * 1000;
 
   const store = {
@@ -35,6 +35,10 @@
   }
 
   const firstWord = (q) => norm(q.split(/[:(]/)[0]);
+  // "Araragi, Koyomi" and "Koyomi Araragi" both become "araragi|koyomi"
+  const nameKey = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/ou/g, "o").replace(/uu/g, "u").split(/[^a-z]+/).filter(Boolean).sort().join("|");
+  const charPick = (ch) => ({ id: ch.mal_id, img: ch.images?.webp?.image_url || ch.images?.jpg?.image_url, url: ch.url });
 
   async function resolveAnime(entry) {
     if (entry.mal) {
@@ -72,15 +76,25 @@
           const { data } = await jikan(`/anime/${id}/characters`);
           for (const c of window.CHARACTERS) {
             if (out.characters[c.id]) continue;
-            const hit = data.find((d) => norm(d.character.name) === norm(c.mal));
+            const hit = data.find((d) => nameKey(d.character.name) === nameKey(c.mal));
             if (hit) {
-              out.characters[c.id] = { id: hit.character.mal_id, img: hit.character.images?.webp?.image_url || hit.character.images?.jpg?.image_url, url: hit.character.url };
+              out.characters[c.id] = charPick(hit.character);
               MAL.emit("character", c.id, out.characters[c.id]);
             }
           }
           store.set(out);
         } catch {}
       }
+      // anyone still missing: search MAL's character index directly
+      for (const c of window.CHARACTERS) {
+        if (out.characters[c.id]) continue;
+        try {
+          const { data } = await jikan(`/characters?q=${encodeURIComponent(c.mal.split(",").reverse().join(" ").trim())}&limit=10`);
+          const hit = data.find((d) => nameKey(d.name) === nameKey(c.mal));
+          if (hit) { out.characters[c.id] = charPick(hit); MAL.emit("character", c.id, out.characters[c.id]); }
+        } catch {}
+      }
+      store.set(out);
     }
     return out;
   }
